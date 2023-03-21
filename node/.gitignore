@@ -1,0 +1,11 @@
+**/node_modules
+**/bin
+**/build
+**/wallets
+**/cache
+**/sindex
+**/alexfiles
+**/pools*.json
+**/sindex
+**/.DS_Store
+**/data
