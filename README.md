@@ -1,9 +1,15 @@
 # arc-envs
 
-Requires Node v18+
+### Requirements
 
-Webpack
+- Node.js 18+ and npm
 
+### Webpack Local Run
+
+```
 npm install
+```
 
+```
 npm start
+```
