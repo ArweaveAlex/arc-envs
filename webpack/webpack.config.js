@@ -10,38 +10,54 @@ module.exports = {
 		path: `${__dirname}/dist`,
 		filename: 'bundle.js',
 	},
-	optimization: {
-		minimize: true,
-		minimizer: [
-			new TerserPlugin({
-				extractComments: false,
-			}),
-		],
-		usedExports: true,
+	devtool: 'eval',
+	mode: process.env.NODE_ENV || 'development',
+	devServer: {
+		static: {
+			directory: path.join(__dirname, 'dist'),
+		},
+		hot: true,
+		historyApiFallback: true,
+		port: 3000,
+		open: false,
+		compress: true,
+		client: {
+			overlay: true,
+		},
 	},
+	optimization:
+		process.env.NODE_ENV === 'production'
+			? {
+					minimize: true,
+					minimizer: [
+						new TerserPlugin({
+							extractComments: false,
+						}),
+					],
+					usedExports: true,
+			  }
+			: {},
 	ignoreWarnings: [
 		{
-			message: /Critical dependency: require function is used in a way in which dependencies cannot be statically extracted/,
+			message:
+				/Critical dependency: require function is used in a way in which dependencies cannot be statically extracted/,
 		},
 	],
 	module: {
 		rules: [
 			{
-				test: /\.ts$|tsx/,
-				use: [
-					{
-						loader: 'ts-loader',
-						options: {
-							compilerOptions: { noEmit: false },
-						},
+				test: /\.(ts|tsx)$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							'@babel/preset-env',
+							['@babel/preset-react', { runtime: 'automatic' }],
+							'@babel/preset-typescript',
+						],
 					},
-				],
-				exclude: /node_modules/,
-			},
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: 'babel-loader',
+				},
 			},
 			{
 				test: /\.css$/,
@@ -56,9 +72,28 @@ module.exports = {
 			{
 				test: /\.(png|jpg|gif)$/,
 				use: [
+					'url-loader',
 					{
-						loader: 'url-loader',
-						options: {},
+						loader: 'image-webpack-loader',
+						options: {
+							mozjpeg: {
+								progressive: true,
+								quality: 65,
+							},
+							optipng: {
+								enabled: false,
+							},
+							pngquant: {
+								quality: [0.65, 0.9],
+								speed: 4,
+							},
+							gifsicle: {
+								interlaced: false,
+							},
+							webp: {
+								quality: 75,
+							},
+						},
 					},
 				],
 			},
@@ -88,33 +123,44 @@ module.exports = {
 		}),
 		new webpack.ProvidePlugin({
 			process: 'process/browser',
+			Buffer: ['buffer', 'Buffer'],
 		}),
 		new webpack.NoEmitOnErrorsPlugin(),
 	],
 	resolve: {
 		extensions: ['.tsx', '.ts', '.jsx', '.js'],
 		preferRelative: true,
+		alias: {
+			process: 'process/browser',
+			crypto: 'crypto-browserify',
+			stream: 'stream-browserify',
+		},
 		fallback: {
 			fs: false,
 			tls: false,
 			net: false,
 			path: false,
-			zlib: false,
-			http: false,
-			https: false,
-			stream: false,
-			crypto: false,
+			zlib: require.resolve('browserify-zlib'),
+			http: require.resolve('stream-http'),
+			https: require.resolve('https-browserify'),
+			events: require.resolve('events/'),
+			stream: require.resolve('stream-browserify'),
+			process: require.resolve('process/browser'),
+			crypto: require.resolve('crypto-browserify'),
+			stream: require.resolve('stream-browserify'),
 			constants: require.resolve('constants-browserify'),
-			'crypto-browserify': require.resolve('crypto-browserify'),
-			os: false,
+			path: require.resolve('path-browserify'),
+			os: require.resolve('os-browserify'),
+			util: require.resolve('util'),
+			assert: require.resolve('assert'),
+			url: require.resolve('url'),
+			buffer: require.resolve('buffer'),
 		},
 		alias: {
 			react: path.resolve(__dirname, 'node_modules/react'),
 			process: 'process/browser',
 			app: path.resolve(__dirname, 'src/app/'),
 			assets: path.resolve(__dirname, 'src/assets/'),
-			clients: path.resolve(__dirname, 'src/clients/'),
-			collections: path.resolve(__dirname, 'src/collections/'),
 			components: path.resolve(__dirname, 'src/components/'),
 			filters: path.resolve(__dirname, 'src/filters/'),
 			global: path.resolve(__dirname, 'src/global/'),
@@ -125,7 +171,6 @@ module.exports = {
 			providers: path.resolve(__dirname, 'src/providers/'),
 			root: path.resolve(__dirname, 'src/root/'),
 			routes: path.resolve(__dirname, 'src/routes/'),
-			search: path.resolve(__dirname, 'src/search/'),
 			state: path.resolve(__dirname, 'src/state/'),
 			views: path.resolve(__dirname, 'src/views/'),
 			wallet: path.resolve(__dirname, 'src/wallet/'),
