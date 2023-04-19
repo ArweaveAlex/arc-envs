@@ -176,6 +176,8 @@ module.exports = {
 			wallet: path.resolve(__dirname, 'src/wallet/'),
 			workers: path.resolve(__dirname, 'src/workers/'),
 			wrappers: path.resolve(__dirname, 'src/wrappers/'),
+			'asn1.js': path.resolve(__dirname, 'node_modules/asn1.js'),
+			elliptic: path.resolve(__dirname, 'node_modules/elliptic'),
 		},
 	},
 	output: {
