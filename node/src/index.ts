@@ -8,7 +8,17 @@ import * as ArcFramework from 'arcframework';
     - neither connection works for getArtifacts
 
     Arweave.net
-    - multiple connections intermitten with getPools query
+    - multiple connections intermittent with getPools query
+
+    arcframework code at bottom of function without escape characters, kills program
+    arcframework code at bottom of function with escape characters program runs no data
+    no arcframewok code program runs
+
+    the existence of the pool-id on arweave shuts down the goldsky query
+
+    Pool-Id query is 504 timeout against arweave.net with existing pool id
+
+    we dont seem to lose execution on the Pool-Id query
 */
 
 (async function () {
@@ -29,6 +39,7 @@ import * as ArcFramework from 'arcframework';
 })();
 
 (async function () {
+    
     const data: any = [];
     // const ids = JSON.stringify(['zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws']);
     // const ids = ['zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws'];
@@ -42,16 +53,16 @@ import * as ArcFramework from 'arcframework';
     const tagFilters = [
         {
             name: 'Pool-Id',
-            values: ['zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws']
+            values: ['NTrE1WKisb0AsIY0NUSWcyWaBQTQH5c4DZ4XBXqCczk']
         }
     ]
 
     // const tagFilters = [{name:"App-Type",values:["Alex-Archiving-Pool-v1.2","Alex-Archiving-Pool-v1.4"]}]
-
+    // const tagFilters = [{name:'App-Type',values:['Alex-Archiving-Pool-v1.2','Alex-Archiving-Pool-v1.4']}]
     // [{name:"App-Type",values:["Alex-Archiving-Pool-v1.2","Alex-Archiving-Pool-v1.4"]}]
 
     const tags = tagFilters ? unquoteJsonKeys(tagFilters) : null;
-
+    console.log(tags)
     // const tags = [
     //     {
     //         name: "Pool-Id",
@@ -98,8 +109,9 @@ import * as ArcFramework from 'arcframework';
     };
 
     console.log(operation);
+    console.log(JSON.stringify(operation));
 
-    const GET_ENDPOINT = 'arweave-search.goldsky.com';
+    const GET_ENDPOINT = 'arweave.net';
 
     const PORT = 443;
     const PROTOCOL = 'https';
@@ -114,7 +126,7 @@ import * as ArcFramework from 'arcframework';
         logging: LOGGING,
     });
 
-    const response = await arweaveGet.api.post('/graphql', operation);
+    const response = await arweaveGet.api.post('/graphql', JSON.stringify(operation));
     console.log(response);
     if (response.data.data) {
         const responseData = response.data.data.transactions.edges;
@@ -124,6 +136,13 @@ import * as ArcFramework from 'arcframework';
     }
 
     console.log({ data: data, nextCursor: null });
+    const gqlData: ArcFramework.ArtifactResponseType = await ArcFramework.getArtifactsByPool({
+        ids: ['zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws'],
+        owner: null,
+        uploader: null,
+        cursor: null,
+        reduxCursor: 'poolAll',
+    });
 })();
 
 function unquoteJsonKeys(json: Object): string {
