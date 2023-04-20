@@ -6,14 +6,15 @@
     "author": "NickJ202",
     "scripts": {
         "start": "ts-node src/index.ts",
+        "bundlr-env": "ts-node src/bundlr-env.ts",
         "build": "tsc"
     },
     "dependencies": {
-        "@bundlr-network/client": "^0.10.5",
+        "@bundlr-network/client": "0.11.0",
         "@noble/hashes": "^1.1.5",
         "@scure/bip32": "^1.1.5",
         "@types/fs-extra": "^8.1.0",
-        "arcframework": "file:.yalc/arcframework",
+        "arcframework": "^1.1.27",
         "arweave": "1.12.4",
         "axios": "^0.26.1",
         "bech32-buffer": "^0.2.1",
