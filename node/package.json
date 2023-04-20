@@ -1,6 +1,6 @@
 {
-    "name": "arcpool",
-    "version": "1.4.9",
+    "name": "arcenvs",
+    "version": "1.0.0",
     "main": "./bin/index.js",
     "repository": "https://github.com/ArweaveAlex/arc-pools.git",
     "author": "NickJ202",
@@ -14,7 +14,7 @@
         "@noble/hashes": "^1.1.5",
         "@scure/bip32": "^1.1.5",
         "@types/fs-extra": "^8.1.0",
-        "arcframework": "^1.1.27",
+        "arcframework": "^1.1.28",
         "arweave": "1.12.4",
         "axios": "^0.26.1",
         "bech32-buffer": "^0.2.1",
