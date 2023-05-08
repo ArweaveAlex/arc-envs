@@ -13,7 +13,7 @@ import * as ArcFramework from 'arcframework';
     // Works - A4wHgj_FqirSt6LiVejyoSqC_DSF22mUFqh4lz5XOIg
     // Fails - zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws
     const gqlData: ArcFramework.ArtifactResponseType = await ArcFramework.getArtifactsByPool({
-        ids: ['A4wHgj_FqirSt6LiVejyoSqC_DSF22mUFqh4lz5XOIg'],
+        ids: ['zoljIRyzG5hp-R4EZV2q8kFI49OAoy23_B9YJ_yEEws'],
         owner: null,
         uploader: null,
         cursor: null,
